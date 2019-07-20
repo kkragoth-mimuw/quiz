@@ -30,3 +30,8 @@ export const userAnswerForCurrentQuestionSelector = createSelector(
   currentQuestionIdSelector,
   (userAnswers, currentQuestionId) => userAnswers.get(currentQuestionId)
 );
+
+export const questionsLengthSelector = createSelector(
+  questionsSelector,
+  (questions) => questions.size
+)

@@ -16,6 +16,11 @@ import { ConnectedRouter } from 'connected-react-router';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 
+// Import Argon css
+// import 'assets/vendor/nucleo/css/nucleo.css';
+// import 'assets/vendor/@fortawesome/fontawesome-free/css/all.min.css';
+// import 'assets/css/argon-dashboard-react.css';
+
 // Import root app
 import App from 'containers/App';
 

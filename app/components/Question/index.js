@@ -2,15 +2,18 @@ import React from 'react';
 
 import Answer from '../Answer';
 
+import QuestionWrapper from './components/QuestionWrapper';
+import QuestionTitle from './components/QuestionTitle';
+
 class Question extends React.Component {
   render() {
     const { questionId, question, answers } = this.props;
 
     return (
-      <div>
-        <div>{question}</div>
+      <QuestionWrapper>
+        <QuestionTitle>{question}</QuestionTitle>
         { answers.map((answer, answerId) => (<Answer questionId={questionId} key={answerId} answerId={answerId} label={answer.get('label')}/>))}
-      </div>
+      </QuestionWrapper>
     )
   }
 }
