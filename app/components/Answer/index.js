@@ -1,29 +1,55 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import Checkbox from '@material-ui/core/Checkbox';
+
 import { userSelectAnswerAction } from '../../containers/Questionnaire/actions';
 import { userAnswerForCurrentQuestionSelector } from '../../containers/Questionnaire/selectors';
-
 import AnswerWrapper from './components/AnswerWrapper';
+import AnswerTextWrapper from './components/AnswerTextWrapper';
 
 class Answer extends React.Component {
   render() {
     const {
+      correctAnswerId,
+      isInSummaryMode,
       questionId,
       answerId,
       label,
       userSelectAnswer,
       userAnswerForCurrentQuestion,
     } = this.props;
-    const active = answerId === userAnswerForCurrentQuestion;
+
+    const isSelectedByUser = answerId === userAnswerForCurrentQuestion;
+
+    const isActive = !isInSummaryMode && isSelectedByUser;
+
+    const isCorrect =
+      isInSummaryMode &&
+      answerId === correctAnswerId;
+
+    const isIncorrect =
+      isInSummaryMode &&
+      isSelectedByUser &&
+      userAnswerForCurrentQuestion !== correctAnswerId;
 
     return (
-      <AnswerWrapper
-        active={active}
-        onClick={() => userSelectAnswer(questionId, answerId)}
-      >
-        {label}
-      </AnswerWrapper>
+      <>
+        {isInSummaryMode && isSelectedByUser && 'Twoja odpowiedź: '}
+        <AnswerWrapper
+          isInSummaryMode={isInSummaryMode}
+          active={isActive}
+          correct={isCorrect}
+          incorrect={isIncorrect}
+          onClick={() =>
+            !isInSummaryMode && userSelectAnswer(questionId, answerId)
+          }
+        >
+          <Checkbox disabled checked={isSelectedByUser} color="default" />{' '}
+
+          <AnswerTextWrapper>{label}</AnswerTextWrapper>
+        </AnswerWrapper>
+        </>
     );
   }
 }

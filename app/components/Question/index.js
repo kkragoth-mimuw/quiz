@@ -7,14 +7,29 @@ import QuestionTitle from './components/QuestionTitle';
 
 class Question extends React.Component {
   render() {
-    const { questionId, question, answers } = this.props;
+    const {
+      questionId,
+      question,
+      answers,
+      isInSummaryMode = false,
+      correctAnswerId = undefined,
+    } = this.props;
 
     return (
       <QuestionWrapper>
         <QuestionTitle>{question}</QuestionTitle>
-        { answers.map((answer, answerId) => (<Answer questionId={questionId} key={answerId} answerId={answerId} label={answer.get('label')}/>))}
+        {answers.map((answer, answerId) => (
+          <Answer
+            isInSummaryMode={isInSummaryMode}
+            questionId={questionId}
+            key={answerId}
+            answerId={answerId}
+            correctAnswerId={correctAnswerId}
+            label={answer.get('label')}
+          />
+        ))}
       </QuestionWrapper>
-    )
+    );
   }
 }
 

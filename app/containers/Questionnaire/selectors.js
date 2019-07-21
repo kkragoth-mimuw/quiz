@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { reduce, mergeDeepLeft, findIndex, propEq } from 'ramda';
 
 import { QUESTIONNAIRE_REDUCER_NAME } from './reducer';
 
@@ -28,10 +29,45 @@ export const userAnswersSelector = createSelector(
 export const userAnswerForCurrentQuestionSelector = createSelector(
   userAnswersSelector,
   currentQuestionIdSelector,
-  (userAnswers, currentQuestionId) => userAnswers.get(currentQuestionId)
+  (userAnswers, currentQuestionId) => userAnswers.get(currentQuestionId),
 );
 
 export const questionsLengthSelector = createSelector(
   questionsSelector,
-  (questions) => questions.size
-)
+  questions => questions.size,
+);
+
+export const correctAnswersIdsSelector = createSelector(
+  questionsSelector,
+  questions => {
+    const questionsWithIndex = questions
+      .toJS()
+      .map((question, questionId) => mergeDeepLeft(question, { questionId }));
+
+    const correctAnswersIds = reduce(
+      (acc, question) => {
+        const correctAnswer = findIndex(
+          propEq('correct', true),
+          question.answers,
+        );
+
+        acc[question.questionId] = correctAnswer;
+
+        return acc;
+      },
+      {},
+      questionsWithIndex,
+    );
+
+    return correctAnswersIds;
+  },
+);
+
+export const countCorrectUserAnswersSelector = createSelector(
+  correctAnswersIdsSelector,
+  userAnswersSelector,
+  (correctAnswers, userAnswers) =>
+    userAnswers.filter(
+      (userAnswer, question) => correctAnswers[question] === userAnswer,
+    ).size,
+);

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
 const QuestionTitle = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  font-size: 2.25rem;
 
-  margin-bottom: 0.5rem;
+  padding: 2rem;
 `;
 
 export default QuestionTitle;
