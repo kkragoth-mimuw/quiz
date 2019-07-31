@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { userSelectAnswerAction } from '../../containers/Questionnaire/actions';
-import { userAnswerForCurrentQuestionSelector } from '../../containers/Questionnaire/selectors';
+import { userAnswersSelector } from '../../containers/Questionnaire/selectors';
 import AnswerWrapper from './components/AnswerWrapper';
 import AnswerTextWrapper from './components/AnswerTextWrapper';
 
@@ -17,16 +17,16 @@ class Answer extends React.Component {
       answerId,
       label,
       userSelectAnswer,
-      userAnswerForCurrentQuestion,
+      userAnswers,
     } = this.props;
+
+    const userAnswerForCurrentQuestion = userAnswers.get(questionId);
 
     const isSelectedByUser = answerId === userAnswerForCurrentQuestion;
 
     const isActive = !isInSummaryMode && isSelectedByUser;
 
-    const isCorrect =
-      isInSummaryMode &&
-      answerId === correctAnswerId;
+    const isCorrect = isInSummaryMode && answerId === correctAnswerId;
 
     const isIncorrect =
       isInSummaryMode &&
@@ -46,10 +46,9 @@ class Answer extends React.Component {
           }
         >
           <Checkbox disabled checked={isSelectedByUser} color="default" />{' '}
-
           <AnswerTextWrapper>{label}</AnswerTextWrapper>
         </AnswerWrapper>
-        </>
+      </>
     );
   }
 }
@@ -60,7 +59,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = createStructuredSelector({
-  userAnswerForCurrentQuestion: userAnswerForCurrentQuestionSelector,
+  userAnswers: userAnswersSelector,
 });
 
 export default connect(
